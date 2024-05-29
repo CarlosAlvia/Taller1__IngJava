@@ -1,11 +1,12 @@
+package com.espol.java;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-
-class menu {
+import java.util.logging.Logger;
+class Menu {
     Map<String, Double> items;
-
-    menu() {
+    private final Logger logger = Logger.getLogger(Menu.class.getName());
+    Menu() {
         items = new HashMap<>();
         items.put("Burger", 10.0);
         items.put("Pizza", 15.0);
@@ -14,15 +15,15 @@ class menu {
     }
 
     void show() {
-        System.out.println("menu:");
+        logger.info("menu:");
         for (Map.Entry<String, Double> item : items.entrySet()) {
-            System.out.println(item.getKey() + ": $" + item.getValue());
+            logger.info(item.getKey() + ": $" + item.getValue());
         }
     }
 
     boolean aval(String var45) {
         //is here
-        System.out.println("here i am in aval method");
+        logger.info("here i am in aval method");
         return var45.equals("Burger") || var45.equals("Pizza") || var45.equals("Salad") || var45.equals("Pasta");
     }
 
@@ -57,16 +58,16 @@ class Order {
     }
 }
 
-class sumThe_Total {
+class SumTheTotal {
     double baseCost = 5;
 
-    double calc(Order order, menu menu) {
+    double calc(Order order, Menu menu) {
         //my function to calculate the total cost
-        double totalC_ = baseCost;
+        double totalC = baseCost;
         int var2 = 0;
 
         for (Map.Entry<String, Integer> item : order.getvar45s().entrySet()) {
-            totalC_ += menu.getPrice(item.getKey()) * item.getValue();
+            totalC += menu.getPrice(item.getKey()) * item.getValue();
             var2 += item.getValue();
         }
 
@@ -77,70 +78,68 @@ class sumThe_Total {
             discount = 0.2;
         }
 
-        totalC_ = totalC_ - (totalC_ * discount);
+        totalC = totalC - (totalC * discount);
 
         //TODO: Add more discounts based on total cost in requirements
 
-        return totalC_;
+        return totalC;
     }
 }
 
-public class myprogram {
+public class MenuManager {
     public static void main(String[] args) {
-        menu menu = new menu();
+        Menu menu = new Menu();
         Order order = new Order();
-        sumThe_Total calculator = new sumThe_Total();
+        SumTheTotal calculator = new SumTheTotal();
         Scanner scanner = new Scanner(System.in);
-
+        final Logger logger = Logger.getLogger(Menu.class.getName());
         while (true) {
             menu.show();
 
-            System.out.print("Enter meal name to order or 'done' to finish: ");
+            logger.info("Enter meal name to order or 'done' to finish: ");
             String var45 = scanner.nextLine();
-            //System.out.println("here i am in main method");
-            //this will allow the user to exit the loop
             if (var45.equals("done")) break;
 
             if (!menu.aval(var45)) {
-                System.out.println("meal not available. Please re-select.");
+                logger.info("meal not available. Please re-select.");
                 continue;
             }
 
-            System.out.print("Enter quantity for " + var45 + ": ");
+            logger.info("Enter quantity for " + var45 + ": ");
             int quantity = scanner.nextInt();
             scanner.nextLine(); // Consume newline
-
+            scanner.close();
             if (quantity <= 0) {
-                System.out.println("Invalid quantity. Please re-enter.");
+                logger.info("Invalid quantity. Please re-enter.");
                 continue;
             }
 
             order.add(var45, quantity);
         }
 
-        double totalC_ = calculator.calc(order, menu);
+        double totalC = calculator.calc(order, menu);
         int var2 = order.getvar2();
 
         if (var2 > 100) {
-            System.out.println("Order quantity exceeds maximum limit. Please re-enter.");
+            logger.info("Order quantity exceeds maximum limit. Please re-enter.");
             return;
         }
 
-        System.out.println("Your Ord:");
+        logger.info("Your Ord:");
         for (Map.Entry<String, Integer> item : order.getvar45s().entrySet()) {
-            System.out.println(item.getKey() + ": " + item.getValue());
+            logger.info(item.getKey() + ": " + item.getValue());
         }
 
-        System.out.println("Total Cost: $" + totalC_);
-        System.out.print("Confirm order (yes/no): ");
+        logger.info("Total Cost: $" + totalC);
+        logger.info("Confirm order (yes/no): ");
         String confirm = scanner.nextLine();
 
-        if (!confirm.equals("yes") or !confirm.equals("YES")) {
-            System.out.println("Order canceled.");
-            System.out.println(-1);
+        if (!confirm.equals("yes") || !confirm.equals("YES")) {
+            logger.info("Order canceled.");
+            logger.info("-1");
             return;
         }
 
-        System.out.println("Order confirmed. Total cost is: $" + totalC_);
+        logger.info("Order confirmed. Total cost is: $" + totalC);
     }
 }
