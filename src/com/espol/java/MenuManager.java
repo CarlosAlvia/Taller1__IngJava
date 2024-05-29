@@ -80,7 +80,14 @@ class SumTheTotal {
 
         totalC = totalC - (totalC * discount);
 
-        //TODO: Add more discounts based on total cost in requirements
+        double specialDiscount = 0;
+        if (totalC > 100) {
+            specialDiscount = 25;
+        } else if (totalC > 50) {
+            specialDiscount = 10;
+        }
+
+        totalC -= specialDiscount;
 
         return totalC;
     }
@@ -102,19 +109,19 @@ public class MenuManager {
 
             if (!menu.aval(var45)) {
                 logger.info("meal not available. Please re-select.");
-                continue;
+            }else{
+                String logQuantity = String.format("Enter quantity for %s: ", var45);
+                logger.info(logQuantity);
+                int quantity = scanner.nextInt();
+                scanner.nextLine();
+                scanner.close();
+                if (quantity <= 0) {
+                    logger.info("Invalid quantity. Please re-enter.");
+                }else{
+                    order.add(var45, quantity);
+                }
             }
 
-            logger.info("Enter quantity for " + var45 + ": ");
-            int quantity = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
-            scanner.close();
-            if (quantity <= 0) {
-                logger.info("Invalid quantity. Please re-enter.");
-                continue;
-            }
-
-            order.add(var45, quantity);
         }
 
         double totalC = calculator.calc(order, menu);
@@ -129,8 +136,8 @@ public class MenuManager {
         for (Map.Entry<String, Integer> item : order.getvar45s().entrySet()) {
             logger.info(item.getKey() + ": " + item.getValue());
         }
-
-        logger.info("Total Cost: $" + totalC);
+        String logTotal = String.format("Total Cost: $ %d", totalC);
+        logger.info(logTotal);
         logger.info("Confirm order (yes/no): ");
         String confirm = scanner.nextLine();
 
@@ -139,7 +146,7 @@ public class MenuManager {
             logger.info("-1");
             return;
         }
-
-        logger.info("Order confirmed. Total cost is: $" + totalC);
+        String logConfirmedOrder = String.format("Order confirmed. Total cost is: $ %d", totalC);
+        logger.info(logConfirmedOrder);
     }
 }
